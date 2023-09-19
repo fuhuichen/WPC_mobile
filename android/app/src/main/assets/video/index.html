@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>VideoDemo</title>
+	<link rel="shortcut icon" href=/favicon.ico>
+	<link href="video-js.css" rel="stylesheet">
+    <script src="jquery.js"></script>
+	<script src="video.js"></script>
+    <script type="text/javascript">
+	
+        var ip,IVSID,channel,port,username,password,sessionId,type,player,snapButton,paused,timer,showSnap;
+		var startTime,endTime;
+		var streamProtocol = "DASH";
+		var languageTag = "en-US";
+		
+		window.onload = function() {
+			document.addEventListener('message', function(msg) {
+				msgObj = JSON.parse(msg.data);
+				if(msgObj.code === 0){
+					var dashInfoObj = msgObj.message;
+					ip = dashInfoObj.domain;
+					IVSID = dashInfoObj.ivsid;
+					channel = dashInfoObj.channelId;
+					port = dashInfoObj.apiport;
+					username = dashInfoObj.username;
+					password = dashInfoObj.password;
+                    streamProtocol = dashInfoObj.streamProtocol;
+                    languageTag = dashInfoObj.languageTag;
+                    showSnap = dashInfoObj.showSnap
+				}
+				else if(msgObj.code === 1){
+					type = 1;
+					onLine();
+				}
+				else if(msgObj.code === 2){
+					var histObj = msgObj.message;
+					startTime = histObj.startime;
+					endTime = histObj.endtime;
+					type = 2;
+					onLine();
+				}
+				else if(msgObj.code === 3){
+					stop();
+				}
+				else if(msgObj.code === 4){
+					exitFullscreen();
+				}
+			});
+			setTimeout("webviewReady()", 500)
+		}
+
+        function onLine() {
+            var data = "<request>\n\t \
+                            <username>" + username + "</username>\n\t \
+                            <password>" + password + "</password>\n\t \
+                        </request>\n";
+            var url = ip + ":" + port + "/AdvStreamingService/Authority/Online";
+            sendRequest(data, url, getSessionId);
+			document.getElementById("videoPlayer").poster = "poster.gif";
+			if (player){
+                player.loadingSpinner.show();
+			}
+        }
+
+        function offLine() {
+            function callback(responseText) {
+                var data = $.parseXML(responseText);
+                var state = $(data).find('Response').text();
+                if (state == 'OK') {
+                    sessionId = null;
+                }
+            };
+            var data = "<request>\n\t \
+                            <sessionID>" + sessionId + "</sessionID>\n\t \
+                        </request>\n";
+            var url = ip + ":" + port + "/AdvStreamingService/Authority/Offline";
+            sendRequest(data, url, callback);
+        }
+
+        function sendRequest(data, url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = false;
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4 && this.status === 200 ) {
+                    if (timer){
+                        clearTimeout(timer);
+					}
+                    callback(this.responseText);
+                }
+            });
+            xhr.open("PUT", url);
+            xhr.setRequestHeader("content-type", "application/xml");
+            xhr.setRequestHeader("Accept", "application/xml");
+            xhr.timeout = 30000;
+            xhr.send(data);
+            if (timer){
+                clearTimeout(timer);
+            }
+            timer = setTimeout(function() {
+                let message;
+                if (languageTag === 'zh-TW' || languageTag === 'zh-Hant-TW'){
+                    message = "視頻請求失敗，請重試";
+                }
+                else if (languageTag === 'zh-CN' || languageTag === 'zh-Hans-CN'){
+                    message = "视频请求失败，请重试";
+                }
+                else {
+                    message = "Play video failed，please retry again";
+				}
+                window.postMessage('{"code":1,"message":"' + message +'"}');
+            }, 30000);
+        }
+
+	    function getSessionId(responseText) {
+			var data = $.parseXML(responseText);
+			sessionId = $(data).find('SessionID').text();
+            var errorCode = $(data).find('ErrorCode').text();
+            if (sessionId) {
+                if (type === 1) {
+                    realTime();
+                } else if (type === 2) {
+                    history();
+                }
+            }
+            else {
+                if (errorCode){
+                    window.postMessage('{"code":1,"message":"Dash GetSession ErrorCode:' + errorCode +'"}');
+                }
+                else {
+                    window.postMessage('{"code":1,"message":"Dash GetSession Error:' + responseText +'"}');
+                }
+            }
+        }
+
+        function realTime() {
+            var data = "<request>\n\t \
+                                <method>connection</method>\n\t \
+                                <sessionID>" + sessionId + "</sessionID>\n\t \
+								<streamingProtocol>" + streamProtocol + "</streamingProtocol>\n\t \
+								<withAudio>true</withAudio>\n\t \
+                                <streamType>SubStream</streamType>\n\t \
+                                <IVSID>" + IVSID + "</IVSID>\n\t \
+                                <channel>" + channel + "</channel>\n\t \
+                            </request>\n";
+            var url = ip + ":" + port + "/AdvStreamingService/LiveStream";
+            sendRequest(data, url, callbackRT);
+        }
+
+        function history() {
+            var data = "<request>\n\t \
+                                <method>connection</method>\n\t \
+                                <sessionID>" + sessionId + "</sessionID>\n\t \
+								<streamingProtocol>" + streamProtocol + "</streamingProtocol>\n\t \
+								<withAudio>true</withAudio>\n\t \
+								<transcodeResolution>D1</transcodeResolution>\n\t \
+				                <IVSID>" + IVSID + "</IVSID>\n\t \
+                                <channel>" + channel + "</channel>\n\t \
+                                <beginTime>" + startTime + "</beginTime>\n\t \
+                                <endTime>" + endTime + "</endTime>\n\t \
+                            </request>\n";
+            var url = ip + ":" + port + "/AdvStreamingService/PlaybackStream";
+            sendRequest(data, url, callbackPB);
+        }
+
+        function playVideo(url) {
+            var video = document.getElementById("videoPlayer");
+            player = videojs(video);
+            player.src({
+                src: url,
+                type: streamProtocol == "HLS" ? "application/x-mpegURL" : "application/dash+xml",
+            });
+            player.on('error', onError);
+            player.on('ended', onEnded);
+            player.on("loadeddata",onloadeddata);
+            player.on("pause",onPause);
+            player.on("play",onPlay);
+            $(player.posterImage.contentEl()).hide();
+            player.play();
+        }
+		
+		function callbackRT(responseText) {
+            var data = $.parseXML(responseText);
+            var url = $(data).find('mpd').text();
+            var errorCode = $(data).find('ErrorCode').text();
+            if (url) {
+                playVideo(url);
+            }
+			else {
+                if (errorCode){
+                    window.postMessage('{"code":1,"message":"Dash PlayRT ErrorCode:' + errorCode +'"}');
+                }
+                else {
+                    window.postMessage('{"code":1,"message":"Dash PlayRT Error:' + responseText +'"}');
+                }
+			}
+		}
+
+        function callbackPB(responseText) {
+            var data = $.parseXML(responseText);
+            var url = $(data).find('mpd').text();
+            var errorCode = $(data).find('ErrorCode').text();
+            if (url) {
+                playVideo(url);
+            }
+            else {
+                if (errorCode){
+                    window.postMessage('{"code":1,"message":"Dash PlayPB ErrorCode:' + errorCode +'"}');
+                }
+                else {
+                    window.postMessage('{"code":1,"message":"Dash PlayPB Error:' + responseText +'"}');
+                }
+            }
+        }
+
+        function addVideoButton(){
+		    if (!snapButton){
+                snapButton = document.createElement('div');
+                snapButton.id = "snapShot";
+                var img = document.createElement('img');
+                img.src = "img_video_snapshot.png"
+                img.style="height:28px;vertical-align:middle;";
+                var span = document.createElement('span');
+                if(languageTag === 'zh-TW' || languageTag === 'zh-CN' || languageTag === 'zh-Hant-TW' || languageTag === 'zh-Hans-CN'){
+                    span.innerHTML = "抓拍";
+                    snapButton.style="position:absolute;width:64px;height:28px;right:10px;top:40%;padding-right:5px;font-size:14px;line-height:24px;text-align: right;color:white;background-color:#24293d;opacity:0.6;border-radius:4px;;cursor:pointer"
+				}
+                else {
+                    span.innerHTML = "Capture";
+                    snapButton.style="position:absolute;width:85px;height:28px;right:10px;top:40%;padding-right:5px;font-size:14px;line-height:24px;text-align: right;color:white;background-color:#24293d;opacity:0.6;border-radius:4px;;cursor:pointer"
+				}
+                snapButton.appendChild(img)
+                snapButton.appendChild(span)
+                snapButton.addEventListener('click', function () {
+                    snapShot();
+                });
+			}
+            player.el().appendChild(snapButton);
+
+/*
+            var shareButton = document.createElement('span');
+            shareButton.id = 'vjs-share-open-button';
+            shareButton.className = 'vjs-share-open vjs-icon-spinner';
+            player.el().appendChild(shareButton);
+            shareButton.addEventListener('click', function() {
+                snapShot();
+            });*/
+		}
+
+		function onError() {
+			var err = player.error();
+            //window.postMessage('{"code":1,"message":"Dash VideoJS Error:' + err.message +'"}');
+		}
+
+        function onEnded() {
+            window.postMessage('{"code":2,"message":"Ended"}');
+        }
+
+        function onloadeddata(){
+		    if (showSnap){
+                addVideoButton();
+			}
+            window.postMessage('{"code":4,"message":"' + document.body.clientHeight +'"}');
+        }
+
+        function onPause() {
+            if(type===1){
+                stop();
+                paused = true;
+			}
+        }
+
+        function onPlay(){
+		   if (paused && type===1 && !sessionId){
+			   onLine();
+               paused = false;
+		   }
+		}
+
+        function stop() {
+            function callback(responseText) {
+                var data = $.parseXML(responseText);
+                var state = $(data).find('state').text();
+                if (state == 'OK') {
+                }
+            };
+            if (player){
+                player.poster('blank.jpg');
+                $(player.posterImage.contentEl()).show();
+                player.loadingSpinner.hide();
+                player.el().removeChild(snapButton);
+            }
+            if (sessionId){
+                var data = "<request>\n\t \
+                            <method>disconnection</method>\n\t \
+                            <sessionID>" + sessionId + "</sessionID>\n\t \
+                            <IVSID>" + IVSID + "</IVSID>\n\t \
+                            <channel>" + channel + "</channel>\n\t \
+                        </request>\n";
+                if (type === 1) {
+                    var url = ip + ":" + port + "/AdvStreamingService/LiveStream";
+                    sendRequest(data, url, callback);
+                } else if (type === 2) {
+                    var url = ip + ":" + port + "/AdvStreamingService/PlaybackStream";
+                    sendRequest(data, url, callback);
+                }
+                offLine();
+			}
+        }
+		
+		function fullscreen(){
+			player.requestFullscreen();
+		}
+		
+		function exitFullscreen() {
+		    player.exitFullscreen();
+		}
+
+		function snapShot(){
+            var video = document.getElementById("videoPlayer_html5_api");
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0);
+            ctx.drawImage(video, 0, 0);
+            var dataURI = canvas.toDataURL('image/jpeg');
+            window.postMessage('{"code":3,"message":"' + dataURI +'"}');
+		}
+		
+        function gerateEndTime() {
+            var startTime = $("#startime").val();
+            if (startTime.length <= 0)
+                alert("please select the start time!");
+            var endtime = new Date(Date.parse(startTime.replace(/-/g, "/")) + 5 * 60 * 1000);
+            var mon = endtime.getMonth() + 1;
+            var day = endtime.getDate();
+            var hour = endtime.getHours();
+            var min = endtime.getMinutes();
+            var seconds = endtime.getSeconds()
+            $("#endtime").val(endtime.getFullYear() + "-"
+                + (mon < 10 ? '0' + mon : mon) + "-"
+                + (day < 10 ? '0' + day : day) + " "
+                + (hour < 10 ? '0' + hour : hour) + ":"
+                + (min < 10 ? '0' + min : min) + ":"
+                + (seconds < 10 ? '0' + seconds : seconds));
+		}
+		
+		function webviewReady() {
+			window.postMessage('{"code":0,"message":"load finish"}');
+		}
+
+		window.postMessage('{"code":0,"message":"load finish"}');
+	</script>
+
+	<style>
+		video::-webkit-media-controls-overlay-play-button {
+			display: none;
+		}
+		.vjs-paused .vjs-big-play-button,
+		.vjs-paused.vjs-has-started .vjs-big-play-button {
+			display: block;
+		}
+		.video-js .vjs-big-play-button{
+			font-size: 2.5em;
+			line-height: 2.3em;
+			height: 2.5em;
+			width: 2.5em;
+			-webkit-border-radius: 2.5em;
+			-moz-border-radius: 2.5em;
+			border-radius: 2.5em;
+			background-color: #73859f;
+			background-color: rgba(115,133,159,.5);
+			border-width: 0.15em;
+		}
+		.vjs-big-play-button .vjs-icon-placeholder {
+			font-size: 1.63em;
+		}
+
+		#vjs-share-open-button, .vjs-user-inactive #vjs-share-open-button {
+			-webkit-transition: .3s ease-in-out;
+			-moz-transition: .3s ease-in-out;
+			-o-transition: .3s ease-in-out;
+			transition: .3s ease-in-out
+		}
+		.vjs-user-inactive #vjs-share-open-button {
+			margin-right: -50px
+		}
+		.vjs-share-open {
+			background-color: rgba(29, 30, 31, 0.290196);
+			color: rgba(255, 255, 255, 0.7);
+			font-size: 20px;
+			padding: 10px;
+			text-align: center;
+			float: right;
+			cursor: pointer;
+			position: absolute;
+			right: 10px;
+			top: 20%
+		}
+	</style>
+</head>
+
+<body style="width:100%;margin:0px auto;">
+	<video id="videoPlayer" class="video-js vjs-fluid vjs-big-play-centered" style="width:100%;min-height:200px;background: #000000;display: block" autoplay controls poster="blank.jpg" >
+	</video>
+</body>
+
+</html>

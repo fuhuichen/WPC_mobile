@@ -1,0 +1,53 @@
+{
+  "_args": [
+    [
+      "jpush-react-native@2.7.5"
+    ]
+  ],
+  "_from": "jpush-react-native@2.7.5",
+  "_id": "jpush-react-native@2.7.5",
+  "_inBundle": false,
+  "_integrity": "sha1-PWZmul2AYveabFrl/uPSncihECc=",
+  "_location": "/jpush-react-native",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "jpush-react-native@2.7.5",
+    "name": "jpush-react-native",
+    "escapedName": "jpush-react-native",
+    "rawSpec": "2.7.5",
+    "saveSpec": null,
+    "fetchSpec": "2.7.5"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/jpush-react-native/download/jpush-react-native-2.7.5.tgz",
+  "_spec": "2.7.5",
+  "author": {
+    "name": "wicked.tc130"
+  },
+  "bugs": {
+    "url": "https://github.com/jpush/jpush-react-native/issues"
+  },
+  "description": "React Native JPush component for Android and iOS",
+  "homepage": "https://github.com/jpush/jpush-react-native",
+  "keywords": [
+    "react-native",
+    "JPush"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "jpush-react-native",
+  "peerDependencies": {
+    "jcore-react-native": ">= 1.5.0",
+    "react-native": ">= 0.50"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpush/jpush-react-native.git"
+  },
+  "types": "index.d.ts",
+  "version": "2.7.5"
+}

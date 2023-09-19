@@ -1,0 +1,49 @@
+{
+  "_args": [
+    [
+      "jcore-react-native@1.7.5"
+    ]
+  ],
+  "_from": "jcore-react-native@1.7.5",
+  "_id": "jcore-react-native@1.7.5",
+  "_inBundle": false,
+  "_integrity": "sha1-usMO3KUdAHLVnB2Vgvwqq92kKGk=",
+  "_location": "/jcore-react-native",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "jcore-react-native@1.7.5",
+    "name": "jcore-react-native",
+    "escapedName": "jcore-react-native",
+    "rawSpec": "1.7.5",
+    "saveSpec": null,
+    "fetchSpec": "1.7.5"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/jcore-react-native/download/jcore-react-native-1.7.5.tgz",
+  "_spec": "1.7.5",
+  "author": {
+    "name": "wicked.tc130"
+  },
+  "bugs": {
+    "url": "https://github.com/jpush/jcore-react-native/issues"
+  },
+  "description": "React Native JCore component for Android and iOS",
+  "homepage": "https://github.com/jpush/jcore-react-native",
+  "keywords": [
+    "react-native",
+    "jiguang",
+    "JCore"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "jcore-react-native",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpush/jcore-react-native.git"
+  },
+  "version": "1.7.5"
+}

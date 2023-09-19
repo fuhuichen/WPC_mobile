@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/realplay_page_ly"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/realplay_play_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/black_bg" >
+
+       <SurfaceView
+           android:id="@+id/realplay_sv"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_alignParentTop="true"
+           android:layout_centerInParent="false"
+           android:background="@android:color/transparent" />
+
+        <include android:id="@+id/real_play_loading"
+            layout="@layout/ez_loading_layout"
+            android:visibility="invisible"/>
+
+        <include android:id="@+id/real_play_tips"
+            layout="@layout/ez_tips_layout"
+            android:visibility="invisible"/>
+
+ 		<include android:id="@+id/real_play_view"
+            layout="@layout/ez_preview_control" />
+
+        <include android:id="@+id/realplay_record_prompt"
+            layout="@layout/ez_record_prompt_layout"
+            android:visibility="invisible"/>
+    </RelativeLayout>
+</LinearLayout>

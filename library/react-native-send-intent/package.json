@@ -1,0 +1,70 @@
+{
+  "_from": "react-native-send-intent",
+  "_id": "react-native-send-intent@1.2.2",
+  "_inBundle": false,
+  "_integrity": "sha1-nuPTdYZOD+XhCtjwzunAVLC+4I4=",
+  "_location": "/react-native-send-intent",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "react-native-send-intent",
+    "name": "react-native-send-intent",
+    "escapedName": "react-native-send-intent",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/react-native-send-intent/download/react-native-send-intent-1.2.2.tgz",
+  "_shasum": "9ee3d375864e0fe5e10ad8f0cee9c054b0bee08e",
+  "_spec": "react-native-send-intent",
+  "author": {
+    "name": "Lucas Ferreira",
+    "email": "contato@lucasferreira.com"
+  },
+  "bugs": {
+    "url": "https://github.com/lucasferreira/react-native-send-intent/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "React Native Android module to use Android's Intent actions for send sms, text to shareable apps, open custom apps, make phone calls and etc",
+  "homepage": "https://github.com/lucasferreira/react-native-send-intent#readme",
+  "keywords": [
+    "react",
+    "react-native",
+    "react-component",
+    "intent",
+    "email",
+    "send",
+    "sent",
+    "share",
+    "text",
+    "phone",
+    "sms",
+    "call",
+    "calls",
+    "dial",
+    "number",
+    "maps",
+    "android"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "react-native-send-intent",
+  "peerDependencies": {
+    "react-native": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasferreira/react-native-send-intent.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "types": "index.d.ts",
+  "version": "1.2.2"
+}

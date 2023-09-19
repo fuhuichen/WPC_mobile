@@ -1,0 +1,15 @@
+{
+  "Insufficient memory": "内存空間不足",
+  "Capture fail": "截圖失敗",
+  "Unselected channel": "請點擊巡檢項名稱播放視頻",
+  "Offline device": "設備離綫，播放失敗",
+  "Connect fail": "設備連接異常，播放失敗",
+  "Verify code": "視頻已加密",
+  "Max connection": "設備連接數超限",
+  "Play completed": "視頻播放完畢",
+  "No record file": "回放時間段無錄像",
+  "Stream type error": "視頻碼流類型錯誤",
+  "No video source": "設備無視頻源",
+  "Invalid device": "無效設備",
+  "Play fail": "播放失敗: "
+}

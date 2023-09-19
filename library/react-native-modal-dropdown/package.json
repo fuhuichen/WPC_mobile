@@ -1,0 +1,69 @@
+{
+  "_args": [
+    [
+      "react-native-modal-dropdown@0.6.2",
+      "E:\\StoreMonitor.LookStore-v2.0"
+    ]
+  ],
+  "_from": "react-native-modal-dropdown@0.6.2",
+  "_id": "react-native-modal-dropdown@0.6.2",
+  "_inBundle": false,
+  "_integrity": "sha1-2mAns1RtIDH7zkYkK//JVWHhNZk=",
+  "_location": "/react-native-modal-dropdown",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "react-native-modal-dropdown@0.6.2",
+    "name": "react-native-modal-dropdown",
+    "escapedName": "react-native-modal-dropdown",
+    "rawSpec": "0.6.2",
+    "saveSpec": null,
+    "fetchSpec": "0.6.2"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/react-native-modal-dropdown/download/react-native-modal-dropdown-0.6.2.tgz",
+  "_spec": "0.6.2",
+  "_where": "E:\\StoreMonitor.LookStore-v2.0",
+  "author": {
+    "name": "sohobloo",
+    "email": "sohobloo@live.cn",
+    "url": "https://github.com/sohobloo"
+  },
+  "bugs": {
+    "url": "https://github.com/sohobloo/react-native-modal-dropdown/issues",
+    "email": "sohobloo@live.cn"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.0"
+  },
+  "description": "A react-native dropdown component for both iOS and Android.",
+  "homepage": "https://github.com/sohobloo/react-native-modal-dropdown",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-native",
+    "react-native-component",
+    "ios",
+    "android",
+    "modal",
+    "dropdown",
+    "picker",
+    "select",
+    "selector",
+    "option"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "react-native-modal-dropdown",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sohobloo/react-native-modal-dropdown.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.6.2"
+}

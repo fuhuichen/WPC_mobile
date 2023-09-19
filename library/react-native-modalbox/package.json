@@ -1,0 +1,60 @@
+{
+  "_from": "git+https://github.com/jayhack/react-native-modalbox.git",
+  "_id": "react-native-modalbox@1.6.0",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/react-native-modalbox",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "react-native-modalbox@git+https://github.com/jayhack/react-native-modalbox.git",
+    "name": "react-native-modalbox",
+    "escapedName": "react-native-modalbox",
+    "rawSpec": "git+https://github.com/jayhack/react-native-modalbox.git",
+    "saveSpec": "git+https://github.com/jayhack/react-native-modalbox.git",
+    "fetchSpec": "https://github.com/jayhack/react-native-modalbox.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "git+https://github.com/jayhack/react-native-modalbox.git#80bdbe398a50c64a04d5a93b0324695adea0bf7f",
+  "_spec": "react-native-modalbox@git+https://github.com/jayhack/react-native-modalbox.git",
+  "_where": "E:\\StoreMonitor.LookStore-v2.0",
+  "author": {
+    "name": "Maxime Mezrahi"
+  },
+  "bugs": {
+    "url": "https://github.com/maxs15/react-native-modalbox/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "create-react-class": "^15.6.0",
+    "prop-types": "^15.5.10"
+  },
+  "deprecated": false,
+  "description": "A <Modal/> component for react-native",
+  "homepage": "https://github.com/maxs15/react-native-modalbox#readme",
+  "keywords": [
+    "react-component",
+    "react-native",
+    "ios",
+    "android",
+    "modal",
+    "box",
+    "modalbox",
+    "window",
+    "swipe"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "react-native-modalbox",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxs15/react-native-modalbox.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.6.0"
+}

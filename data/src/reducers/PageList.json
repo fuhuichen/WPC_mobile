@@ -1,0 +1,27 @@
+[
+  {
+    "id": "PageBI",
+    "title": "門店效益"
+  },
+  {
+    "id": "PagePos",
+    "title": "收銀管理"
+  },
+  {
+    "id": "PageIMM",
+    "title": "設備管理"
+  },
+  {
+    "id": "PageEQ",
+    "title": "門店效益"
+  },
+  {
+    "id": "PageCustom",
+    "title": "顧客滿意度"
+  },
+  {
+    "id": "PageManagement",
+    "title": "管理中心"
+  },
+
+]
