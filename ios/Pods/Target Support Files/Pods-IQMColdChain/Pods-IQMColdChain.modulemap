@@ -1,6 +1,0 @@
-module Pods_IQMColdChain {
-  umbrella header "Pods-IQMColdChain-umbrella.h"
-
-  export *
-  module * { export * }
-}

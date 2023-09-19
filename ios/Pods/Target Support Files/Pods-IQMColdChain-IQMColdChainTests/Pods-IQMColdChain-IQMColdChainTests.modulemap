@@ -1,6 +1,0 @@
-module Pods_IQMColdChain_IQMColdChainTests {
-  umbrella header "Pods-IQMColdChain-IQMColdChainTests-umbrella.h"
-
-  export *
-  module * { export * }
-}
