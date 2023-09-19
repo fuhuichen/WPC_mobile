@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "411312087518",
+    "project_id": "ccmmobile-af1b4",
+    "storage_bucket": "ccmmobile-af1b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411312087518:android:ea6cf614c34545d6417d4f",
+        "android_client_info": {
+          "package_name": "com.iqmcoldchain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411312087518-hvg8uipejvk63pfnst793r43bss76ju5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv74itpW0BGlIwkrqeh5PbdbQCE2wSXsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411312087518-hvg8uipejvk63pfnst793r43bss76ju5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "411312087518-fs3ke1ugg2k35mu5anst0iajvomgk6jg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.advantech.iservice.iqm.coldchain"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411312087518:android:2718c1988b12c0ad417d4f",
+        "android_client_info": {
+          "package_name": "com.storevue.connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411312087518-hvg8uipejvk63pfnst793r43bss76ju5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv74itpW0BGlIwkrqeh5PbdbQCE2wSXsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411312087518-hvg8uipejvk63pfnst793r43bss76ju5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "411312087518-fs3ke1ugg2k35mu5anst0iajvomgk6jg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.advantech.iservice.iqm.coldchain"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
