@@ -1,0 +1,10 @@
+CFBundleDisplayName = "ColdChain";
+
+NSBluetoothPeripheralUsageDescription = "需要您的同意，才能訪問藍牙，以便於文件傳輸";
+NSCalendarsUsageDescription = "需要您的同意，才能訪問日曆，以便於選擇日期";
+NSCameraUsageDescription = "需要您的同意，才能訪問相機，以便於拍照、錄製視頻";
+NSLocationWhenInUseUsageDescription = "需要您的同意，才能訪問位置信息，以便於門店定位";
+NSMicrophoneUsageDescription = "需要您的同意，才能訪問麥克風，以便於錄音";
+NSMotionUsageDescription = "需要您的同意，才能訪問運動和健身，以便於更好體驗";
+NSPhotoLibraryUsageDescription = "需要您的同意，才能訪問相冊，以便於瀏覽圖片";
+NSSpeechRecognitionUsageDescription = "需要您的同意，才能訪問語音識別，以便於更好體驗";
