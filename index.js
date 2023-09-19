@@ -71,7 +71,7 @@ const errorHandler = (e, isFatal) => {
 setJSExceptionHandler(errorHandler,false);
 
 let globalTimer = 'globalTimer';
-class LookStore extends Component {
+class WPCMobile extends Component {
     state = {
         slotHeight: 0
     };
@@ -176,5 +176,5 @@ Text.defaultProps = Object.assign({}, Text.defaultProps, {allowFontScaling: fals
 YellowBox.ignoreWarnings(['ListView is deprecated']);
 console.disableYellowBox = true
 
-AppRegistry.registerComponent(appName, () => LookStore);
+AppRegistry.registerComponent(appName, () => WPCMobile);
 //AppRegistry.registerHeadlessTask('RNFirebaseBackgroundMessage', () => bgMessaging);

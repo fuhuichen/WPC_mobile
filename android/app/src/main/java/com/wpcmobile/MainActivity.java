@@ -1,4 +1,4 @@
-package com.lookstore;
+package com.wpcmobile;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "LookStore";
+        return "WPCMobile";
     }
 
     @Override

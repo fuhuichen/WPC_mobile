@@ -1,4 +1,4 @@
-package com.lookstore;
+package com.wpcmobile;
 
 import android.app.Application;
 import android.content.Context;

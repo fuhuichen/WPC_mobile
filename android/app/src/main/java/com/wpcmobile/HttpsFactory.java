@@ -1,4 +1,4 @@
-package com.lookstore;
+package com.wpcmobile;
 
 import android.util.Log;
 import com.facebook.react.modules.network.OkHttpClientFactory;

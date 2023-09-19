@@ -127,7 +127,7 @@ class RNUpdate extends Component {
                     if(this.state.optional){
                         this.refs.modalBox && this.refs.modalBox.close();
                     }
-                    Linking.openURL(`https://play.google.com/store/apps/details?id=${'com.lookstore'}`);
+                    Linking.openURL(`https://play.google.com/store/apps/details?id=${'com.wpcmobile'}`);
                 }
             }
         }catch (e) {
