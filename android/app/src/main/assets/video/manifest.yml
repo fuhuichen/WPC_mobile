@@ -1,9 +1,0 @@
-applications:
-    - name: dash-webview-1.0.1
-      buildpack: staticfile_buildpack
-      hosts:
-      - dash-webview-1-0-1-advvideoservice-vcm
-      - dash-webview-advvideoservice-vcm
-      instances: 1
-      memory: 128M
-      disk_quota: 256M

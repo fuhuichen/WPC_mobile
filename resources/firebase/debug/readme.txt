@@ -1,2 +1,0 @@
-account: xxx
-password: xxx
