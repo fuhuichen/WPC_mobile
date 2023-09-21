@@ -1,0 +1,34 @@
+export const dims = {
+  container:{
+    paddingTop:0,
+    paddingLeft:16,
+    paddingRight:16,
+    paddingBottom:16,
+  },
+  header:{
+    height:60,
+  },
+  bottom:{
+    height:60,
+  },
+  button:{
+    height:40,
+    borderRadius:4,
+  },
+  input:{
+    height:44,
+    borderRadius:8,
+    paddingLeft:12,
+    paddingRight:12,
+  },
+  selection:{
+    height:44,
+    borderRadius:4,
+    paddingLeft:12,
+    paddingRight:12,
+  },
+  icon:{
+    width:24,
+    height:24,
+  }
+};
