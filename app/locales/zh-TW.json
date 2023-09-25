@@ -288,6 +288,17 @@
     "不使用event_data_detail":"數據詳情",
     "不使用event_related_inspection":"相關事件檢視",
     "不使用filter_date_end_hint":"開始日期不得在結束日期之後",
-    "不使用filter_date_range":"資料區間"
+    "不使用filter_date_range":"資料區間",
+    
+    "course_signin":"課程簽到",
+    "course_select":"請選擇課程",
+    "location_checkin":"地點打卡",
+    "location_select":"請選擇地點",
+    "point_check":"點數查詢",
+    "confirm":"確認",
+    "back_main":"返回主畫面",
+    "stop_signin":"結束簽到",
+    "success_signin":"簽到成功",
+    "continue_signin":"繼續簽到"
 
 }

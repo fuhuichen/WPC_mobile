@@ -14,9 +14,11 @@ import {AppContainer,
         DataInput,
         NormalButton,
         Tab,
-        IconButton} from '../../framework'
-import {StringUtil, DimUtil,LangUtil} from '../../framework'
-import {ERROR_CODE,ENVIRONMENT,PAGES,STORAGES,OPTIONS} from  "../define"
+        IconButton} from '../../framework';
+import {StringUtil, DimUtil,LangUtil} from '../../framework';
+import {ERROR_CODE,ENVIRONMENT,PAGES,STORAGES,OPTIONS} from  "../define";
+import MainAPI from "../api/main";
+
 class PageLogin extends Component {
   constructor(props) {
     super(props);
@@ -31,11 +33,20 @@ class PageLogin extends Component {
   }
   
   async componentDidMount() {
+    await this.init();
+  }
+  
+  async init(){
+    MainAPI.init(ENVIRONMENT.mainURL)
   }
 
   async login(){
     const { navigation} = this.props;
-    navigation.replace(PAGES.QRCode_Scanner,{})
+    let {account, password} = this.state;
+    console.log("login account : ", account);
+    console.log("login password : ", password);
+    let result = await MainAPI.loginRequest(account,password)
+    navigation.replace(PAGES.MAIN,{})
   }
 
   async next(){
@@ -91,7 +102,7 @@ class PageLogin extends Component {
                 <Typography
                     style={{marginBottom:30}}
                     font={"head01"}
-                    text={"Advantech / QRCodeScanner"}
+                    text={"Advantech / Course SignIn"}
                     color='black'/>
                 <DataInput
                   alert={errorAccount!=""}

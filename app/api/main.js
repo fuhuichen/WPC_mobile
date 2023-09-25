@@ -28,15 +28,12 @@ export default class MainAPI{
     console.log(data)
     return HttpUtil.postAsync(this.MAIN_URL+api,data)
   }
-  static async loginRequest(email,password,app_client_id){
-      let md5pwd  = md5.hex_md5( password );
-      let body = {email,password:md5pwd,app_client_id}
-      body.app_sec={
-          package:"storevue",
-          type:"app",
-          app_secret:"q8r4a3bfWVFOff7MOef53k6EnXJm67"
-      };
-      return this.postRequestAsync('login', body);
+  static async loginRequest(email,password){
+        let body = {
+            email: email,
+            password: password
+        }
+        return this.postRequestAsync('auth/login', body);
   }
   static async isLogin(token){
       let body = {token}

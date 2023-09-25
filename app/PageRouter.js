@@ -17,7 +17,7 @@ import  {
 import {connect} from 'react-redux';
 import * as actions from '../actions';
 import {FrameworkProvider,AppContainer} from '../framework';
-import {PageLogin, PageQRCodeScanner} from './pages';
+import {PageLogin, PageCourseSign, PageLocationCheckin, PagePointCheck, PageMain} from './pages';
 
 class PageRouter extends Component {
   constructor(props) {
@@ -50,7 +50,13 @@ class PageRouter extends Component {
                    <Stack.Navigator initialRouteName={PAGES.LOGIN}>
                       <Stack.Screen name={PAGES.LOGIN} component={PageLogin}
                         options={{header:()=><View/>}}/>
-                      <Stack.Screen name={PAGES.QRCode_Scanner} component={PageQRCodeScanner}
+                      <Stack.Screen name={PAGES.MAIN} component={PageMain}
+                        options={{header:()=><View/>}}/>
+                      <Stack.Screen name={PAGES.Course_SignIn} component={PageCourseSign}
+                        options={{header:()=><View/>}}/>
+                      <Stack.Screen name={PAGES.Location_Checkin} component={PageLocationCheckin}
+                        options={{header:()=><View/>}}/>
+                      <Stack.Screen name={PAGES.Point_Check} component={PagePointCheck}
                         options={{header:()=><View/>}}/>
                    </Stack.Navigator>
                  </NavigationContainer>
