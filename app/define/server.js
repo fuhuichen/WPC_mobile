@@ -1,5 +1,5 @@
 const WPC_SERVER =  {
-    mainURL: 'https://preview-api-apps.wise-iservice.com/api/'
+    mainURL: 'http://4.194.19.250/api/'
 }
 
 const ENVIRONMENT=WPC_SERVER;

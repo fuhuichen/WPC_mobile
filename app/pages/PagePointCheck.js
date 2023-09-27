@@ -20,13 +20,15 @@ import {ERROR_CODE,ENVIRONMENT,PAGES, STORAGES} from  "../define";
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
 import { SelectList } from 'react-native-dropdown-select-list';
+import MainAPI from "../api/main";
 
 class PagePointCheck extends Component {
   constructor(props) {
     super(props);
     this.state={
       scan: true,
-      signinNo: null
+      scanFail: false,
+      checkinMember: null
     }
   }
 
@@ -37,13 +39,25 @@ class PagePointCheck extends Component {
   }
   
   scanStart() {
-    this.setState({scan: true, signinNo: null});
+    this.setState({scan: true, checkinMember: null, scanFail: false});
   }
 
-  scanData(data) {
+  async scanData(data) {
     console.log("scan data : ", JSON.stringify(data));
     if(data && data.data) {
-      this.setState({scan: false, signinNo: data.data});
+      let body = {
+        qrCodeNumber: data.data
+      }
+      let result = await MainAPI.getMemberInfo(body);
+      console.log("getAccountList result : ", JSON.stringify(result));
+      if(result.errorcode == ERROR_CODE.SUCCESS) {
+        this.setState({checkinMember: result.member});
+      } else {
+        this.setState({scanFail: true});
+      }
+      this.setState({scan: false});
+    } else {
+      this.setState({scan: false, scanFail: true});
     }
   }
 
@@ -53,9 +67,7 @@ class PagePointCheck extends Component {
   }
 
   render(){
-    let {scan, signinNo} = this.state;
-
-    let point = 100;
+    let {scan, checkinMember, scanFail} = this.state;
     
     return ( <PageContainer
                   backgrouncImage
@@ -79,7 +91,7 @@ class PagePointCheck extends Component {
                   />}
 
                   {/* step2 */}
-                  {!scan && signinNo != null && 
+                  {!scan && checkinMember != null && 
                   <Container fullwidth
                     justifyContent={"flex-start"}
                     alignItems={"flex-start"} style={{flex:1}}>
@@ -89,9 +101,9 @@ class PagePointCheck extends Component {
                         text={'PartnerName:'}
                         color='black'/>
                     <Typography
-                        style={{marginBottom:10}}
+                        style={{marginBottom:20}}
                         font={"content03"}
-                        text={signinNo}
+                        text={checkinMember.firstName + ' ' + checkinMember.lastName}
                         color='black'/>
                     <Typography
                         style={{marginBottom:10}}
@@ -101,7 +113,7 @@ class PagePointCheck extends Component {
                     <Typography
                         style={{marginBottom:10}}
                         font={"content03"}
-                        text={'xxxx@xxxxxxxxxc'}
+                        text={checkinMember.email}
                         color='black'/>
                     <View style={{flexDirection:'row', justifyContent: 'space-between', marginBottom:30}}>
                       <Typography
@@ -112,18 +124,35 @@ class PagePointCheck extends Component {
                       <Typography
                           style={{marginLeft:100}}
                           font={"title01"}
-                          text={point}
+                          text={checkinMember.wpcPoints}
                           color='black'/>
                     </View>
+                  </Container>}
+
+                  {/* fail */}
+                  {!scan && scanFail && 
+                  <Container fullwidth
+                    justifyContent={"flex-start"}
+                    alignItems={"flex-start"} style={{flex:1, alignItems:'center', marginTop: 100}}>
+                      <Typography
+                          style={{marginBottom:10}}
+                          font={"title03"}
+                          text={LangUtil.getStringByKey("QRCode_Error")}
+                          color='black'/>
+                      <Typography
+                          style={{marginBottom:10}}
+                          font={"title03"}
+                          text={LangUtil.getStringByKey("scan_again")}
+                          color='black'/>
                   </Container>}
                 </Container>
                 
                 
                 {!scan && <View style={{flexDirection:'row', justifyContent: 'space-between', marginBottom:30}}>
-                  {signinNo != null && <NormalButton
+                  <NormalButton
                     style={{width: '45%'}}
                     onPress={()=>{this.scanStart()}}
-                    text={LangUtil.getStringByKey("continue_signin")}/>}
+                    text={LangUtil.getStringByKey("continue_signin")}/>
                   <NormalButton
                     style={{width: '45%'}}
                     onPress={()=>{this.backMainPage()}}

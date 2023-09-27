@@ -85,5 +85,20 @@ export default class MainAPI{
       return this.postRequestAsync('device/add_to',data);
   }
 
-
+    // WPC API
+    static async getCourseList(){
+        return this.postRequestAsync('course/list');
+    }
+    static async getSiteList(){
+        return this.postRequestAsync('site/list');
+    }
+    static async checkinCourse(data){
+        return this.postRequestAsync('checkin/course',data);
+    }
+    static async checkinSite(data){
+        return this.postRequestAsync('checkin/site',data);
+    }
+    static async getMemberInfo(data){
+        return this.postRequestAsync('member/info',data);
+    }
 }

@@ -19,69 +19,88 @@ import {LangUtil,StorageUtil} from '../../framework';
 import {ERROR_CODE,ENVIRONMENT,PAGES, STORAGES} from  "../define";
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import { RNCamera } from 'react-native-camera';
-import { SelectList } from 'react-native-dropdown-select-list';
+import SelectDropdown from 'react-native-select-dropdown';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MainAPI from "../api/main";
 
 class PageCourseSign extends Component {
   constructor(props) {
     super(props);
     this.state={
       scan: false,
-      signinNo: null,
-      courseId: null,
-      courseList: [
-        {
-          key: 1,
-          value: '課程1'
-        },
-        {
-          key: 2,
-          value: '課程2'
-        },
-        {
-          key: 3,
-          value: '課程3'
-        },
-        {
-          key: 4,
-          value: '課程4'
-        },
-        {
-          key: 5,
-          value: '課程5'
-        },
-        {
-          key: 6,
-          value: '課程6'
-        }
-      ]
+      scanFail: false,
+      checkinMember: null,
+      courseSelect: null,
+      bgSelect:'All',
+      sectorSelect:'All',
+      bgList: [],
+      sectorList: [],
+      courseList: [],
+      checkinMember: null,
+      scanAlready: false
     }
   }
 
   componentWillUnmount() {
 
   }
-  async componentDidMount() {
-    this.open = false;
+
+  componentDidMount() {
+    this.init();
+  }
+
+  async init() {
+    let result = await MainAPI.getCourseList();
+    console.log("getCourseList result : ", JSON.stringify(result));
+    if(result.errorcode == ERROR_CODE.SUCCESS) {
+      this.setState({bgList: result.bgList, sectorList: result.sectorList, courseList: result.rows});
+    }
   }
   
   scanStart() {
-    this.setState({scan: true, signinNo: null});
+    this.setState({scan: true, checkinMember: null, scanAlready: false, scanFail: false});
   }
 
   scanStop() {
-    this.setState({scan: false, courseId: null});
+    this.setState({scan: false, courseSelect: null});
   }
 
-  scanData(data) {
+  async scanData(data) {
     console.log("scan data : ", JSON.stringify(data));
+    let {courseSelect} = this.state;
     if(data && data.data) {
-      this.setState({scan: false, signinNo: data.data});
+      let body = {
+        courseId: courseSelect.key,
+        qrCodeNumber: data.data
+      }
+      let result = await MainAPI.checkinCourse(body);
+      console.log("checkinCourse result : ", JSON.stringify(result));
+      if(result.errorcode == ERROR_CODE.SUCCESS) {
+        this.setState({checkinMember: result.member});
+      } else if (result.errorcode == ERROR_CODE.ALREADY_CHECKIN) {
+        this.setState({scanAlready: true, checkinMember: result.member});
+      } else {
+        this.setState({scanFail: true});
+      }
+      this.setState({scan: false});
+    } else {
+      this.setState({scan: false, scanFail: true});
     }
+  }
+
+  setSelected_bg(select) {
+    console.log("bg select : ", select);
+    this.setState({bgSelect: select});
+  }
+
+  setSelected_sector(select) {
+    console.log("sector select : ", select);
+    this.setState({sectorSelect: select});
   }
 
   setSelected(select) {
     console.log("course select : ", select);
-    this.setState({courseId: select});
+    this.setState({courseSelect: select});
   }
 
   backMainPage() {
@@ -90,16 +109,32 @@ class PageCourseSign extends Component {
   }
 
   render(){
-    let {scan, signinNo, courseList, courseId} = this.state;
+    let {scan, checkinMember, courseList, bgList, sectorList, bgSelect, sectorSelect, courseSelect, scanAlready, scanFail} = this.state;
 
-    let courseNameSelect = '';
-    if(courseId != null) {
-      courseList.forEach(course => {
-        if(course.key == courseId) {
-          courseNameSelect = course.value;
-        }
-      })
-    }
+    let courseOptions = [], bgOptions = ['All'], sectorOptions = ['All'];
+    bgList.forEach(bg => {
+      bgOptions.push(bg);
+    });
+
+    sectorList.forEach(sector => {
+      sectorOptions.push(sector);
+    });
+
+    courseList.forEach(course => {
+      let canSelect = true;
+      if(bgSelect != 'All' && course.bgName != bgSelect) {
+        canSelect = false;
+      }
+      if(canSelect && sectorSelect != 'All' && course.sectorName != sectorSelect) {
+        canSelect = false;
+      }
+      if(canSelect) {
+        courseOptions.push({
+          key: course.courseId,
+          value: course.name
+        })
+      }
+    })
     
     return ( <PageContainer
                   backgrouncImage
@@ -113,23 +148,71 @@ class PageCourseSign extends Component {
                       text={LangUtil.getStringByKey("course_signin")}
                       color='black'/>
 
-                  {courseNameSelect != '' && 
+                  {courseSelect != null && 
                   <Typography
                       style={{marginBottom:10}}
                       font={"content03"}
-                      text={courseNameSelect}
+                      text={courseSelect.value}
                       color='black'/>}
 
                   {/* step1 */}
-                  {!scan && signinNo == null && 
-                  <SelectList 
-                      boxStyles={{width:300}}
-                      dropdownStyles={{minHeight: 50}}
-                      setSelected={(val) => this.setSelected(val)} 
-                      data={courseList} 
-                      save="key"
-                      placeholder={LangUtil.getStringByKey("course_select")}
-                  />}
+                  {!scan && checkinMember == null && scanFail == false &&
+                  <View style={styles.dropdownsRow}>
+                    <SelectDropdown data={bgOptions}
+                                    onSelect={(selectedItem, index) => {
+                                      this.setSelected_bg(selectedItem);
+                                    }}
+                                    defaultValueByIndex={0}
+                                    buttonTextAfterSelection={(selectedItem, index) => {
+                                      return selectedItem;
+                                    }}
+                                    rowTextForSelection={(item, index) => {
+                                      return item;
+                                    }}
+                                    buttonStyle={styles.dropdown1BtnStyle}
+                                    buttonTextStyle={styles.dropdown1BtnTxtStyle}
+                                    renderDropdownIcon={isOpened => {
+                                      return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18} />;
+                                    }}
+                                    dropdownIconPosition={'right'}
+                    />
+                    <SelectDropdown data={sectorOptions}
+                                    onSelect={(selectedItem, index) => {
+                                      this.setSelected_sector(selectedItem);
+                                    }}
+                                    defaultValueByIndex={0}
+                                    buttonTextAfterSelection={(selectedItem, index) => {
+                                      return selectedItem;
+                                    }}
+                                    rowTextForSelection={(item, index) => {
+                                      return item;
+                                    }}
+                                    buttonStyle={styles.dropdown1BtnStyle}
+                                    buttonTextStyle={styles.dropdown1BtnTxtStyle}
+                                    renderDropdownIcon={isOpened => {
+                                      return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18} />;
+                                    }}
+                                    dropdownIconPosition={'right'}
+                    />
+                    <SelectDropdown data={courseOptions}
+                                    defaultButtonText={LangUtil.getStringByKey("course_select")}
+                                    onSelect={(selectedItem, index) => {
+                                      this.setSelected(selectedItem);
+                                    }}
+                                    buttonTextAfterSelection={(selectedItem, index) => {
+                                      return selectedItem.value;
+                                    }}
+                                    rowTextForSelection={(item, index) => {
+                                      return item.value;
+                                    }}
+                                    buttonStyle={styles.dropdown1BtnStyle}
+                                    buttonTextStyle={styles.dropdown1BtnTxtStyle}
+                                    renderDropdownIcon={isOpened => {
+                                      return <FontAwesome name={isOpened ? 'chevron-up' : 'chevron-down'} color={'#444'} size={18} />;
+                                    }}
+                                    dropdownIconPosition={'right'}
+                    />
+                  </View>}
 
                   {/* step2 */}
                   {scan && 
@@ -141,7 +224,7 @@ class PageCourseSign extends Component {
                   />}
 
                   {/* step3 */}
-                  {!scan && signinNo != null && 
+                  {!scan && checkinMember != null && 
                   <Container fullwidth
                     justifyContent={"flex-start"}
                     alignItems={"flex-start"} style={{flex:1}}>
@@ -151,9 +234,9 @@ class PageCourseSign extends Component {
                         text={'PartnerName:'}
                         color='black'/>
                     <Typography
-                        style={{marginBottom:10}}
+                        style={{marginBottom:20}}
                         font={"content03"}
-                        text={signinNo}
+                        text={checkinMember.firstName + ' ' + checkinMember.lastName}
                         color='black'/>
                     <Typography
                         style={{marginBottom:10}}
@@ -163,30 +246,63 @@ class PageCourseSign extends Component {
                     <Typography
                         style={{marginBottom:10}}
                         font={"content03"}
-                        text={'xxxx@xxxxxxxxxc'}
+                        text={checkinMember.email}
                         color='black'/>
+                    {scanAlready == false && 
                     <Container fullwidth
-                    justifyContent={"flex-start"}
-                    alignItems={"flex-start"} style={{flex:1, alignItems:'center'}}>
+                      justifyContent={"flex-start"}
+                      alignItems={"flex-start"} style={{flex:1, alignItems:'center', marginTop: 100}}>
                       <Typography
                           style={{marginBottom:10}}
-                          font={"subtitle01"}
+                          font={"title03"}
                           text={LangUtil.getStringByKey("success_signin")}
                           color='black'/>
-                    </Container>
+                    </Container>}
+                    {scanAlready && 
+                    <Container fullwidth
+                      justifyContent={"flex-start"}
+                      alignItems={"flex-start"} style={{flex:1, alignItems:'center', marginTop: 100}}>
+                      <Typography
+                          style={{marginBottom:10}}
+                          font={"title03"}
+                          text={LangUtil.getStringByKey("fail_signin")}
+                          color='black'/>
+                      <Typography
+                          style={{marginBottom:10}}
+                          font={"title03"}
+                          text={'(' + LangUtil.getStringByKey("already_signin") + ')'}
+                          color='black'/>
+                    </Container>}
+                  </Container>}                  
+
+                  {/* fail */}
+                  {!scan && scanFail && 
+                  <Container fullwidth
+                    justifyContent={"flex-start"}
+                    alignItems={"flex-start"} style={{flex:1, alignItems:'center', marginTop: 100}}>
+                      <Typography
+                          style={{marginBottom:10}}
+                          font={"title03"}
+                          text={LangUtil.getStringByKey("QRCode_Error")}
+                          color='black'/>
+                      <Typography
+                          style={{marginBottom:10}}
+                          font={"title03"}
+                          text={LangUtil.getStringByKey("scan_again")}
+                          color='black'/>
                   </Container>}
                 </Container>
                 
                 
                 {!scan && <View style={{flexDirection:'row', justifyContent: 'space-between', marginBottom:30}}>
-                  {signinNo == null && <NormalButton
+                  {checkinMember == null && scanFail == false && <NormalButton
                     style={{width: '45%'}}
-                    disabled={courseId == null}
+                    disabled={courseSelect == null}
                     onPress={()=>{this.scanStart()}}
                     text={LangUtil.getStringByKey("confirm")}/>}
-                  {signinNo != null && <NormalButton
+                  {(checkinMember != null || scanFail == true) && <NormalButton
                     style={{width: '45%'}}
-                    disabled={courseId == null}
+                    disabled={courseSelect == null}
                     onPress={()=>{this.scanStart()}}
                     text={LangUtil.getStringByKey("continue_signin")}/>}
                   <NormalButton
@@ -205,6 +321,22 @@ class PageCourseSign extends Component {
              </PageContainer>);
   }
 }
+
+const styles = StyleSheet.create({
+  dropdownsRow: {flex: 1},
+
+  dropdown1BtnStyle: {
+    width: '80%',
+    height: 50,
+    marginTop: 30,
+    backgroundColor: '#FFF',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#444',
+  },
+
+  dropdown1BtnTxtStyle: {color: '#444', textAlign: 'left'},
+});
 
 const mapStateToProps = state =>{
   return {loginInfo:state.loginInfo,storeList:state.storeList};

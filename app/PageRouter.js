@@ -16,7 +16,7 @@ import  {
 } from 'react-native';
 import {connect} from 'react-redux';
 import * as actions from '../actions';
-import {FrameworkProvider,AppContainer} from '../framework';
+import {FrameworkProvider,AppContainer,Spinner} from '../framework';
 import {PageLogin, PageCourseSign, PageLocationCheckin, PagePointCheck, PageMain} from './pages';
 
 class PageRouter extends Component {
@@ -43,6 +43,7 @@ class PageRouter extends Component {
   }
 
   render(){
+    const {loading} = this.props;
     if(this.state.render)
     return ( <FrameworkProvider>
                <AppContainer>
@@ -60,6 +61,7 @@ class PageRouter extends Component {
                         options={{header:()=><View/>}}/>
                    </Stack.Navigator>
                  </NavigationContainer>
+                 <Spinner visible={loading}/>
               </AppContainer>
             </FrameworkProvider>);
        return <View/>

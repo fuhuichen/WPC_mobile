@@ -299,6 +299,10 @@
     "back_main":"返回主畫面",
     "stop_signin":"結束簽到",
     "success_signin":"簽到成功",
-    "continue_signin":"繼續簽到"
+    "fail_signin":"簽到失敗",
+    "already_signin":"重複簽到",
+    "continue_signin":"繼續簽到",
+    "QRCode_Error":"QR Code錯誤",
+    "scan_again":"請重新掃描"
 
 }

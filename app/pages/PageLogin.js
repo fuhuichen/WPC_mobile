@@ -45,8 +45,16 @@ class PageLogin extends Component {
     let {account, password} = this.state;
     console.log("login account : ", account);
     console.log("login password : ", password);
+    this.props.setLoading(true)
     let result = await MainAPI.loginRequest(account,password)
-    navigation.replace(PAGES.MAIN,{})
+    console.log("login result : ", result);
+    if(result.errorcode != ERROR_CODE.SUCCESS){
+      this.setState({errorPassword:LangUtil.getStringByKey("error_auth_fail")})
+    } else {
+      MainAPI.setToken(result.token, result.userId);
+      navigation.replace(PAGES.MAIN,{});
+    }
+    this.props.setLoading(false);
   }
 
   async next(){
