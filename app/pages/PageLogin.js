@@ -105,12 +105,12 @@ class PageLogin extends Component {
                 <Typography
                     style={{marginBottom:10}}
                     font={"text02"}
-                    text={"Welcome"}
+                    text={"Advantech"}
                     color='black'/>
                 <Typography
                     style={{marginBottom:30}}
                     font={"head01"}
-                    text={"Advantech / Course SignIn"}
+                    text={"WPC iEvent System"}
                     color='black'/>
                 <DataInput
                   alert={errorAccount!=""}
