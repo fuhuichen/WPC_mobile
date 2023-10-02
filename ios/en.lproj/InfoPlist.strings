@@ -1,0 +1,11 @@
+CFBundleDisplayName = "WPCMobile";
+
+NSBluetoothPeripheralUsageDescription = "We need access to your bluetooth sharing, to transfer document.";
+NSCalendarsUsageDescription = "We need to access your calendars, to select date.";
+NSCameraUsageDescription = "We need to access your camera, to take screenshots.";
+NSLocationWhenInUseUsageDescription = "We need access to your location, to locate nearby stores.";
+NSMicrophoneUsageDescription = "We need access to your microphone, to record messages.";
+NSMotionUsageDescription = "We need access to your health&fitness, to create better experiences.";
+NSPhotoLibraryUsageDescription = "We need access to your photos, to browse images.";
+NSSpeechRecognitionUsageDescription = "We need access to your speech recognition, to create better experiences.";
+
