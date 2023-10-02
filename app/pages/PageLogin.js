@@ -17,6 +17,7 @@ import {AppContainer,
         IconButton} from '../../framework';
 import {StringUtil, DimUtil,LangUtil} from '../../framework';
 import {ERROR_CODE,ENVIRONMENT,PAGES,STORAGES,OPTIONS} from  "../define";
+import * as simpleStore from "react-native-simple-store";
 import MainAPI from "../api/main";
 
 class PageLogin extends Component {
@@ -37,7 +38,12 @@ class PageLogin extends Component {
   }
   
   async init(){
-    MainAPI.init(ENVIRONMENT.mainURL)
+    MainAPI.init(ENVIRONMENT.mainURL);
+    let res = await simpleStore.get('Login');
+    if (res != null) {
+        let login = JSON.parse(res);
+        this.setState({account: login.account, password: login.password})
+    }
   }
 
   async login(){
@@ -51,6 +57,10 @@ class PageLogin extends Component {
     if(result.errorcode != ERROR_CODE.SUCCESS){
       this.setState({errorPassword:LangUtil.getStringByKey("error_auth_fail")})
     } else {
+      let login = {};
+      login.account = account;
+      login.password = password;
+      simpleStore.save('Login',JSON.stringify(login));
       MainAPI.setToken(result.token, result.userId);
       navigation.replace(PAGES.MAIN,{});
     }
