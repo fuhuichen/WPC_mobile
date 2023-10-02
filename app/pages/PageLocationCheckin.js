@@ -115,8 +115,8 @@ class PageLocationCheckin extends Component {
       locationOptions.push(location);
     });
 
-    typeList.forEach(sector => {
-      typeOptions.push(sector);
+    typeList.forEach(type => {
+      typeOptions.push(type);
     });
 
     siteList.forEach(site => {
@@ -124,7 +124,7 @@ class PageLocationCheckin extends Component {
       if(locationSelect != 'All' && site.locationName != locationSelect) {
         canSelect = false;
       }
-      if(canSelect && typeSelect != 'All' && site.sectorName != typeSelect) {
+      if(canSelect && typeSelect != 'All' && site.type != typeSelect) {
         canSelect = false;
       }
       if(canSelect) {
