@@ -1,6 +1,7 @@
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Orientation from 'react-native-orientation-locker';
 import {PAGES} from "./define"
 import {LangUtil} from '../framework'
 const Stack = createNativeStackNavigator();
@@ -39,6 +40,7 @@ class PageRouter extends Component {
 
   async componentDidMount() {
     await LangUtil.init();
+    Orientation.lockToPortrait();
     this.setState({render: true})
   }
 
