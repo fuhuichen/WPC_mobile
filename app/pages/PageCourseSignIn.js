@@ -62,7 +62,7 @@ class PageCourseSign extends Component {
   }
 
   scanStop() {
-    this.setState({scan: false, courseSelect: null});
+    this.setState({scan: false/*, courseSelect: null*/});
   }
 
   async scanData(data) {
@@ -110,6 +110,8 @@ class PageCourseSign extends Component {
 
   render(){
     let {scan, checkinMember, courseList, bgList, sectorList, bgSelect, sectorSelect, courseSelect, scanAlready, scanFail} = this.state;
+    
+    console.log("========render courseSelect : ", courseSelect);
 
     let courseOptions = [], bgOptions = ['All'], sectorOptions = ['All'];
     bgList.forEach(bg => {
@@ -135,6 +137,33 @@ class PageCourseSign extends Component {
         })
       }
     })
+
+    let bgDefaultSelectIndex = 0;
+    if(bgSelect != null) {
+      bgOptions.forEach((bg,index) => {
+        if(bg == bgSelect) {
+          bgDefaultSelectIndex = index;
+        }
+      })
+    }
+
+    let sectorDefaultSelectIndex = 0;
+    if(sectorSelect != null) {
+      sectorOptions.forEach((sector,index) => {
+        if(sector == sectorSelect) {
+          sectorDefaultSelectIndex = index;
+        }
+      })
+    }
+
+    let courseDefaultSelectIndex = null;
+    if(courseSelect != null) {
+      courseOptions.forEach((course,index) => {
+        if(course.key == courseSelect.key) {
+          courseDefaultSelectIndex = index;
+        }
+      })
+    }
     
     return ( <PageContainer
                   backgrouncImage
@@ -162,7 +191,7 @@ class PageCourseSign extends Component {
                                     onSelect={(selectedItem, index) => {
                                       this.setSelected_bg(selectedItem);
                                     }}
-                                    defaultValueByIndex={0}
+                                    defaultValueByIndex={bgDefaultSelectIndex}
                                     buttonTextAfterSelection={(selectedItem, index) => {
                                       return selectedItem;
                                     }}
@@ -180,7 +209,7 @@ class PageCourseSign extends Component {
                                     onSelect={(selectedItem, index) => {
                                       this.setSelected_sector(selectedItem);
                                     }}
-                                    defaultValueByIndex={0}
+                                    defaultValueByIndex={sectorDefaultSelectIndex}
                                     buttonTextAfterSelection={(selectedItem, index) => {
                                       return selectedItem;
                                     }}
@@ -199,6 +228,7 @@ class PageCourseSign extends Component {
                                     onSelect={(selectedItem, index) => {
                                       this.setSelected(selectedItem);
                                     }}
+                                    defaultValueByIndex={courseDefaultSelectIndex}
                                     buttonTextAfterSelection={(selectedItem, index) => {
                                       return selectedItem.value;
                                     }}

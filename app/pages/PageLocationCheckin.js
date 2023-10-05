@@ -61,7 +61,7 @@ class PageLocationCheckin extends Component {
   }
 
   scanStop() {
-    this.setState({scan: false, siteSelect: null});
+    this.setState({scan: false/*, siteSelect: null*/});
   }
 
   async scanData(data) {
@@ -134,6 +134,33 @@ class PageLocationCheckin extends Component {
         })
       }
     })
+
+    let locationDefaultSelectIndex = 0;
+    if(locationSelect != null) {
+      locationOptions.forEach((location,index) => {
+        if(location == locationSelect) {
+          locationDefaultSelectIndex = index;
+        }
+      })
+    }
+
+    let typeDefaultSelectIndex = 0;
+    if(typeSelect != null) {
+      typeOptions.forEach((type,index) => {
+        if(type == typeSelect) {
+          typeDefaultSelectIndex = index;
+        }
+      })
+    }
+
+    let siteDefaultSelectIndex = null;
+    if(siteSelect != null) {
+      siteOptions.forEach((site,index) => {
+        if(site.key == siteSelect.key) {
+          siteDefaultSelectIndex = index;
+        }
+      })
+    }
     
     return ( <PageContainer
                   backgrouncImage
@@ -161,7 +188,7 @@ class PageLocationCheckin extends Component {
                                     onSelect={(selectedItem, index) => {
                                       this.setSelected_bg(selectedItem);
                                     }}
-                                    defaultValueByIndex={0}
+                                    defaultValueByIndex={locationDefaultSelectIndex}
                                     buttonTextAfterSelection={(selectedItem, index) => {
                                       return selectedItem;
                                     }}
@@ -179,7 +206,7 @@ class PageLocationCheckin extends Component {
                                     onSelect={(selectedItem, index) => {
                                       this.setSelected_sector(selectedItem);
                                     }}
-                                    defaultValueByIndex={0}
+                                    defaultValueByIndex={typeDefaultSelectIndex}
                                     buttonTextAfterSelection={(selectedItem, index) => {
                                       return selectedItem;
                                     }}
@@ -198,6 +225,7 @@ class PageLocationCheckin extends Component {
                                     onSelect={(selectedItem, index) => {
                                       this.setSelected(selectedItem);
                                     }}
+                                    defaultValueByIndex={siteDefaultSelectIndex}
                                     buttonTextAfterSelection={(selectedItem, index) => {
                                       return selectedItem.value;
                                     }}
