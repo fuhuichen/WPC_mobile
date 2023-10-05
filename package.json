@@ -24,6 +24,7 @@
     "react-native-camera": "^4.2.1",
     "react-native-dropdown-select-list": "^2.0.5",
     "react-native-md5": "^1.0.0",
+    "react-native-permissions": "^3.9.2",
     "react-native-orientation-locker": "^1.5.0",
     "react-native-qrcode-scanner": "^1.5.5",
     "react-native-safe-area": "^0.5.1",
