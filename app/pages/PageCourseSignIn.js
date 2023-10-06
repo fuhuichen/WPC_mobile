@@ -325,6 +325,10 @@ class PageCourseSign extends Component {
                 
                 
                 {!scan && <View style={{flexDirection:'row', justifyContent: 'space-between', marginBottom:30}}>
+                  <NormalButton
+                    style={{width: '45%'}}
+                    onPress={()=>{this.backMainPage()}}
+                    text={LangUtil.getStringByKey("back_main")}/>
                   {checkinMember == null && scanFail == false && <NormalButton
                     style={{width: '45%'}}
                     disabled={courseSelect == null}
@@ -335,10 +339,6 @@ class PageCourseSign extends Component {
                     disabled={courseSelect == null}
                     onPress={()=>{this.scanStart()}}
                     text={LangUtil.getStringByKey("continue_signin")}/>}
-                  <NormalButton
-                    style={{width: '45%'}}
-                    onPress={()=>{this.backMainPage()}}
-                    text={LangUtil.getStringByKey("back_main")}/>
                 </View>
                 }
 
