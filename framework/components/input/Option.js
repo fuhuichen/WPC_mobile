@@ -32,7 +32,7 @@ class Option extends Component {
     //console.log(width,height)
   //  console.log("Checked"+selected)
     //console.log("Show Optons="+text)
-    console.log("Render Option")
+    //console.log("Render Option")
     return (
       <Context.Consumer>
         {({ theme}) => (
