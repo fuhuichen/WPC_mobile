@@ -330,12 +330,12 @@ class PageCourseSign extends Component {
                     onPress={()=>{this.backMainPage()}}
                     text={LangUtil.getStringByKey("back_main")}/>
                   {checkinMember == null && scanFail == false && <NormalButton
-                    style={{width: '45%'}}
+                    style={courseSelect == null ? {width: '45%'} : {width: '45%', backgroundColor: '#35CDA8'}}
                     disabled={courseSelect == null}
                     onPress={()=>{this.scanStart()}}
                     text={LangUtil.getStringByKey("confirm")}/>}
                   {(checkinMember != null || scanFail == true) && <NormalButton
-                    style={{width: '45%'}}
+                    style={courseSelect == null ? {width: '45%'} : {width: '45%', backgroundColor: '#35CDA8'}}
                     disabled={courseSelect == null}
                     onPress={()=>{this.scanStart()}}
                     text={LangUtil.getStringByKey("continue_signin")}/>}
