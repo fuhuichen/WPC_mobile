@@ -37,7 +37,7 @@ class PagePointCheck extends Component {
   }
   async componentDidMount() {
   }
-  
+
   scanStart() {
     this.setState({scan: true, checkinMember: null, scanFail: false});
   }
@@ -68,7 +68,7 @@ class PagePointCheck extends Component {
 
   render(){
     let {scan, checkinMember, scanFail} = this.state;
-    
+
     return ( <PageContainer
                   backgrouncImage
                   isHeader={false} style={{paddingTop:50}}>
@@ -82,7 +82,7 @@ class PagePointCheck extends Component {
                       color='black'/>
 
                   {/* step1 */}
-                  {scan && 
+                  {scan &&
                   <QRCodeScanner
                     onRead={(data) => this.scanData(data)}
                     flashMode={RNCamera.Constants.FlashMode.torch}
@@ -91,7 +91,7 @@ class PagePointCheck extends Component {
                   />}
 
                   {/* step2 */}
-                  {!scan && checkinMember != null && 
+                  {!scan && checkinMember != null &&
                   <Container fullwidth
                     justifyContent={"flex-start"}
                     alignItems={"flex-start"} style={{flex:1}}>
@@ -130,7 +130,7 @@ class PagePointCheck extends Component {
                   </Container>}
 
                   {/* fail */}
-                  {!scan && scanFail && 
+                  {!scan && scanFail &&
                   <Container fullwidth
                     justifyContent={"flex-start"}
                     alignItems={"flex-start"} style={{flex:1, alignItems:'center', marginTop: 100}}>
@@ -146,26 +146,26 @@ class PagePointCheck extends Component {
                           color='black'/>
                   </Container>}
                 </Container>
-                
-                
+
+
                 {!scan && <View style={{flexDirection:'row', justifyContent: 'space-between', marginBottom:30}}>
+                <NormalButton
+                  style={{width: '45%'}}
+                  onPress={()=>{this.backMainPage()}}
+                  text={LangUtil.getStringByKey("back_main")}/>
                   <NormalButton
-                    style={{width: '45%'}}
+                    style={{width: '45%',backgroundColor: '#35CDA8'}}
                     onPress={()=>{this.scanStart()}}
-                    text={LangUtil.getStringByKey("continue_signin")}/>
-                  <NormalButton
-                    style={{width: '45%'}}
-                    onPress={()=>{this.backMainPage()}}
-                    text={LangUtil.getStringByKey("back_main")}/>
+                    text={LangUtil.getStringByKey("continue_query")}/>
                 </View>
                 }
 
-                {scan && 
+                {scan &&
                 <NormalButton
                   style={{marginBottom:30}}
                   onPress={()=>{this.backMainPage()}}
-                  text={LangUtil.getStringByKey("stop_signin")}/>
-              } 
+                  text={LangUtil.getStringByKey("stop_query")}/>
+              }
              </PageContainer>);
   }
 }

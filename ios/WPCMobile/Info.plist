@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>FontAwesome.ttf</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -36,23 +40,23 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>"We need to access your camera, to take screenshots."</string>
+	<string>&quot;We need to access your camera, to take screenshots.&quot;</string>
 	<key>NSContactsUsageDescription</key>
-	<string>NSContactsUsageDescription"We need access to your microphone, to record messages."</string>
+	<string>NSContactsUsageDescription&quot;We need access to your microphone, to record messages.&quot;</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>"We need access to your location, to locate nearby stores."</string>
+	<string>&quot;We need access to your location, to locate nearby stores.&quot;</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>"We need access to your location, to locate nearby stores."</string>
+	<string>&quot;We need access to your location, to locate nearby stores.&quot;</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>"We need access to your microphone, to record messages."</string>
+	<string>&quot;We need access to your microphone, to record messages.&quot;</string>
 	<key>NSMotionUsageDescription</key>
-	<string>"We need access to your microphone, to record messages."</string>
+	<string>&quot;We need access to your microphone, to record messages.&quot;</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>"We need access to your photos, to browse images."</string>
+	<string>&quot;We need access to your photos, to browse images.&quot;</string>
 	<key>NSSiriUsageDescription</key>
-	<string>"We need access to your microphone, to record messages."</string>
+	<string>&quot;We need access to your microphone, to record messages.&quot;</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

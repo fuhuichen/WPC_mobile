@@ -50,7 +50,7 @@ target 'WPCMobile' do
     # Pods for testing
   end
   permissions_path = '../node_modules/react-native-permissions/ios'
-  pod 'Permission-Camera', :path => "#{permissions_path}/Camera/Permission-Camera.podspec"
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(

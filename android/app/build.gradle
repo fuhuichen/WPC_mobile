@@ -78,8 +78,8 @@ android {
         applicationId "com.wpcmobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 104
+        versionName "1.0.4"
         missingDimensionStrategy 'react-native-camera', 'general'
     }
     signingConfigs {

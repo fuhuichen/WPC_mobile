@@ -50,6 +50,7 @@
 		F93E4B052ACAA24B00EFC063 /* en.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en.lproj; sourceTree = "<group>"; };
 		F93E4B072ACAA28300EFC063 /* zh-Hans.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hans.lproj"; sourceTree = "<group>"; };
 		F93E4B092ACAA29800EFC063 /* zh-Hant.lproj */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "zh-Hant.lproj"; sourceTree = "<group>"; };
+		F9BF46E72ADD18080000C68D /* FontAwesome.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +93,7 @@
 		13B07FAE1A68108700A75B9A /* WPCMobile */ = {
 			isa = PBXGroup;
 			children = (
+				F9BF46E82ADD18100000C68D /* Fonts */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -155,6 +157,14 @@
 				89C6BE57DB24E9ADA2F236DE /* Pods-WPCMobile-WPCMobileTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		F9BF46E82ADD18100000C68D /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F9BF46E72ADD18080000C68D /* FontAwesome.ttf */,
+			);
+			name = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -497,7 +507,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1.0.2.1;
+				CURRENT_PROJECT_VERSION = 1.0.4.1;
 				DEVELOPMENT_TEAM = 26997EJ72X;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = WPCMobile/Info.plist;
@@ -505,7 +515,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -525,14 +535,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1.0.2.1;
+				CURRENT_PROJECT_VERSION = 1.0.4.1;
 				DEVELOPMENT_TEAM = 26997EJ72X;
 				INFOPLIST_FILE = WPCMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
