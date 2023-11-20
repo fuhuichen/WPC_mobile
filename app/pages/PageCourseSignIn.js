@@ -50,13 +50,19 @@ class PageCourseSign extends Component {
   }
 
   async init() {
-    let result = await MainAPI.getCourseList();
-    console.log("getCourseList result : ", JSON.stringify(result));
+    const {bgSelect,sectorSelect} = this.state;
+    let result = await MainAPI.getCourseList(bgSelect!="All"?bgSelect:null,sectorSelect!="All"?sectorSelect:null );
+  //  console.log("getCourseList result : ", JSON.stringify(result));
     if(result.errorcode == ERROR_CODE.SUCCESS) {
-      this.setState({bgList: result.bgList, sectorList: result.sectorList, courseList: result.rows});
+      let courseSelect = null;
+      console.log("GetCourseLen"+result.sectorList.length)
+      console.log("Get CourseLiestLen="+result.rows.length)
+      this.setState({bgList: result.bgList, sectorList: result.sectorList,
+         courseList: result.rows, courseSelect});
     }
+    if(this.refCourseSelect)this.refCourseSelect.reset()
   }
-  
+
   scanStart() {
     this.setState({scan: true, checkinMember: null, scanAlready: false, scanFail: false});
   }
@@ -88,14 +94,17 @@ class PageCourseSign extends Component {
     }
   }
 
-  setSelected_bg(select) {
+  async setSelected_bg(select) {
     console.log("bg select : ", select);
-    this.setState({bgSelect: select});
+    await this.setState({bgSelect: select,sectorSelect:"All"});
+    await this.init()
+    //courseSelect
   }
 
-  setSelected_sector(select) {
+  async  setSelected_sector(select) {
     console.log("sector select : ", select);
-    this.setState({sectorSelect: select});
+    await this.setState({sectorSelect: select});
+    await this.init()
   }
 
   setSelected(select) {
@@ -110,7 +119,7 @@ class PageCourseSign extends Component {
 
   render(){
     let {scan, checkinMember, courseList, bgList, sectorList, bgSelect, sectorSelect, courseSelect, scanAlready, scanFail} = this.state;
-    
+
     console.log("========render courseSelect : ", courseSelect);
 
     let courseOptions = [], bgOptions = ['All'], sectorOptions = ['All'];
@@ -123,19 +132,10 @@ class PageCourseSign extends Component {
     });
 
     courseList.forEach(course => {
-      let canSelect = true;
-      if(bgSelect != 'All' && course.bgName != bgSelect) {
-        canSelect = false;
-      }
-      if(canSelect && sectorSelect != 'All' && course.sectorName != sectorSelect) {
-        canSelect = false;
-      }
-      if(canSelect) {
-        courseOptions.push({
-          key: course.courseId,
-          value: course.name
-        })
-      }
+      courseOptions.push({
+        key: course.courseId,
+        value: course.name
+      })
     })
 
     let bgDefaultSelectIndex = 0;
@@ -157,6 +157,7 @@ class PageCourseSign extends Component {
     }
 
     let courseDefaultSelectIndex = null;
+
     if(courseSelect != null) {
       courseOptions.forEach((course,index) => {
         if(course.key == courseSelect.key) {
@@ -164,7 +165,8 @@ class PageCourseSign extends Component {
         }
       })
     }
-    
+    console.log("courseDefaultSelectIndex="+courseDefaultSelectIndex)
+
     return ( <PageContainer
                   backgrouncImage
                   isHeader={false} style={{paddingTop:50}}>
@@ -177,7 +179,7 @@ class PageCourseSign extends Component {
                       text={LangUtil.getStringByKey("course_signin")}
                       color='black'/>
 
-                  {courseSelect != null && 
+                  {courseSelect != null &&
                   <Typography
                       style={{marginBottom:10}}
                       font={"content03"}
@@ -188,8 +190,8 @@ class PageCourseSign extends Component {
                   {!scan && checkinMember == null && scanFail == false &&
                   <View style={styles.dropdownsRow}>
                     <SelectDropdown data={bgOptions}
-                                    onSelect={(selectedItem, index) => {
-                                      this.setSelected_bg(selectedItem);
+                                    onSelect={async(selectedItem, index) => {
+                                      await this.setSelected_bg(selectedItem);
                                     }}
                                     defaultValueByIndex={bgDefaultSelectIndex}
                                     buttonTextAfterSelection={(selectedItem, index) => {
@@ -206,8 +208,8 @@ class PageCourseSign extends Component {
                                     dropdownIconPosition={'right'}
                     />
                     <SelectDropdown data={sectorOptions}
-                                    onSelect={(selectedItem, index) => {
-                                      this.setSelected_sector(selectedItem);
+                                    onSelect={async(selectedItem, index) => {
+                                      await this.setSelected_sector(selectedItem);
                                     }}
                                     defaultValueByIndex={sectorDefaultSelectIndex}
                                     buttonTextAfterSelection={(selectedItem, index) => {
@@ -223,7 +225,10 @@ class PageCourseSign extends Component {
                                     }}
                                     dropdownIconPosition={'right'}
                     />
-                    <SelectDropdown data={courseOptions}
+                    <SelectDropdown ref={(ele) => {
+                                      this.refCourseSelect = ele;
+                                    }}
+                                    data={courseOptions}
                                     defaultButtonText={LangUtil.getStringByKey("course_select")}
                                     onSelect={(selectedItem, index) => {
                                       this.setSelected(selectedItem);
@@ -245,7 +250,7 @@ class PageCourseSign extends Component {
                   </View>}
 
                   {/* step2 */}
-                  {scan && 
+                  {scan &&
                   <QRCodeScanner
                     onRead={(data) => this.scanData(data)}
                     flashMode={RNCamera.Constants.FlashMode.torch}
@@ -254,7 +259,7 @@ class PageCourseSign extends Component {
                   />}
 
                   {/* step3 */}
-                  {!scan && checkinMember != null && 
+                  {!scan && checkinMember != null &&
                   <Container fullwidth
                     justifyContent={"flex-start"}
                     alignItems={"flex-start"} style={{flex:1}}>
@@ -278,7 +283,7 @@ class PageCourseSign extends Component {
                         font={"content03"}
                         text={checkinMember.email}
                         color='black'/>
-                    {scanAlready == false && 
+                    {scanAlready == false &&
                     <Container fullwidth
                       justifyContent={"flex-start"}
                       alignItems={"flex-start"} style={{flex:1, alignItems:'center', marginTop: 100}}>
@@ -288,7 +293,7 @@ class PageCourseSign extends Component {
                           text={LangUtil.getStringByKey("success_signin")}
                           color='black'/>
                     </Container>}
-                    {scanAlready && 
+                    {scanAlready &&
                     <Container fullwidth
                       justifyContent={"flex-start"}
                       alignItems={"flex-start"} style={{flex:1, alignItems:'center', marginTop: 100}}>
@@ -303,10 +308,10 @@ class PageCourseSign extends Component {
                           text={'(' + LangUtil.getStringByKey("already_signin") + ')'}
                           color='black'/>
                     </Container>}
-                  </Container>}                  
+                  </Container>}
 
                   {/* fail */}
-                  {!scan && scanFail && 
+                  {!scan && scanFail &&
                   <Container fullwidth
                     justifyContent={"flex-start"}
                     alignItems={"flex-start"} style={{flex:1, alignItems:'center', marginTop: 100}}>
@@ -322,8 +327,8 @@ class PageCourseSign extends Component {
                           color='black'/>
                   </Container>}
                 </Container>
-                
-                
+
+
                 {!scan && <View style={{flexDirection:'row', justifyContent: 'space-between', marginBottom:30}}>
                   <NormalButton
                     style={{width: '45%'}}
@@ -342,12 +347,12 @@ class PageCourseSign extends Component {
                 </View>
                 }
 
-                {scan && 
+                {scan &&
                 <NormalButton
                   style={{marginBottom:30}}
                   onPress={()=>{this.scanStop()}}
                   text={LangUtil.getStringByKey("stop_signin")}/>
-              } 
+              }
              </PageContainer>);
   }
 }

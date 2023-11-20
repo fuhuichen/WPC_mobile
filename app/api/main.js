@@ -86,11 +86,12 @@ export default class MainAPI{
   }
 
     // WPC API
-    static async getCourseList(){
-        return this.postRequestAsync('course/list');
+    static async getCourseList(bgName,sectorName){
+        console.log({bgName,sectorName})
+        return this.postRequestAsync('course/list',{bgName,sectorName});
     }
-    static async getSiteList(){
-        return this.postRequestAsync('site/list');
+    static async getSiteList(locationName,type){
+        return this.postRequestAsync('site/list',{locationName,type});
     }
     static async checkinCourse(data){
         return this.postRequestAsync('checkin/course',data);

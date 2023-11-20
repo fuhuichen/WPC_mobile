@@ -49,13 +49,16 @@ class PageLocationCheckin extends Component {
   }
 
   async init() {
-    let result = await MainAPI.getSiteList();
+    const {locationSelect,typeSelect} = this.state;
+    let result = await MainAPI.getSiteList(locationSelect!="All"?locationSelect:null,typeSelect!='All'?typeSelect:null );
     console.log("getSiteList result : ", JSON.stringify(result));
     if(result.errorcode == ERROR_CODE.SUCCESS) {
-      this.setState({locationList: result.locationList, typeList: result.typeList, siteList: result.rows});
+      this.setState({locationList: result.locationList, typeList: result.typeList,
+        siteList: result.rows,   siteSelect: null});
     }
+    if(this.refSiteSelect)this.refSiteSelect.reset()
   }
-  
+
   scanStart() {
     this.setState({scan: true, checkinMember: null, scanAlready: false, scanFail: false});
   }
@@ -87,14 +90,16 @@ class PageLocationCheckin extends Component {
     }
   }
 
-  setSelected_bg(select) {
+  async setSelected_bg(select) {
     console.log("bg select : ", select);
-    this.setState({locationSelect: select});
+    await this.setState({locationSelect: select,typeSelect:"All"});
+    await this.init()
   }
 
-  setSelected_sector(select) {
+  async setSelected_sector(select) {
     console.log("sector select : ", select);
-    this.setState({typeSelect: select});
+    await this.setState({typeSelect: select});
+    await this.init()
   }
 
   setSelected(select) {
@@ -120,19 +125,10 @@ class PageLocationCheckin extends Component {
     });
 
     siteList.forEach(site => {
-      let canSelect = true;
-      if(locationSelect != 'All' && site.locationName != locationSelect) {
-        canSelect = false;
-      }
-      if(canSelect && typeSelect != 'All' && site.type != typeSelect) {
-        canSelect = false;
-      }
-      if(canSelect) {
-        siteOptions.push({
-          key: site.siteId,
-          value: site.name
-        })
-      }
+      siteOptions.push({
+        key: site.siteId,
+        value: site.name
+      })
     })
 
     let locationDefaultSelectIndex = 0;
@@ -161,7 +157,7 @@ class PageLocationCheckin extends Component {
         }
       })
     }
-    
+
     return ( <PageContainer
                   backgrouncImage
                   isHeader={false} style={{paddingTop:50}}>
@@ -174,7 +170,7 @@ class PageLocationCheckin extends Component {
                       text={LangUtil.getStringByKey("location_checkin")}
                       color='black'/>
 
-                  {siteSelect != null && 
+                  {siteSelect != null &&
                   <Typography
                       style={{marginBottom:10}}
                       font={"content03"}
@@ -185,8 +181,8 @@ class PageLocationCheckin extends Component {
                   {!scan && checkinMember == null && scanFail == false &&
                   <View style={styles.dropdownsRow}>
                     <SelectDropdown data={locationOptions}
-                                    onSelect={(selectedItem, index) => {
-                                      this.setSelected_bg(selectedItem);
+                                    onSelect={async(selectedItem, index) => {
+                                      await this.setSelected_bg(selectedItem);
                                     }}
                                     defaultValueByIndex={locationDefaultSelectIndex}
                                     buttonTextAfterSelection={(selectedItem, index) => {
@@ -203,8 +199,8 @@ class PageLocationCheckin extends Component {
                                     dropdownIconPosition={'right'}
                     />
                     <SelectDropdown data={typeOptions}
-                                    onSelect={(selectedItem, index) => {
-                                      this.setSelected_sector(selectedItem);
+                                    onSelect={async(selectedItem, index) => {
+                                      await this.setSelected_sector(selectedItem);
                                     }}
                                     defaultValueByIndex={typeDefaultSelectIndex}
                                     buttonTextAfterSelection={(selectedItem, index) => {
@@ -221,6 +217,9 @@ class PageLocationCheckin extends Component {
                                     dropdownIconPosition={'right'}
                     />
                     <SelectDropdown data={siteOptions}
+                                    ref={(ele) => {
+                                      this.refSiteSelect = ele;
+                                    }}
                                     defaultButtonText={LangUtil.getStringByKey("location_select")}
                                     onSelect={(selectedItem, index) => {
                                       this.setSelected(selectedItem);
@@ -242,7 +241,7 @@ class PageLocationCheckin extends Component {
                   </View>}
 
                   {/* step2 */}
-                  {scan && 
+                  {scan &&
                   <QRCodeScanner
                     onRead={(data) => this.scanData(data)}
                     flashMode={RNCamera.Constants.FlashMode.torch}
@@ -251,7 +250,7 @@ class PageLocationCheckin extends Component {
                   />}
 
                   {/* step3 */}
-                  {!scan && checkinMember != null && 
+                  {!scan && checkinMember != null &&
                   <Container fullwidth
                     justifyContent={"flex-start"}
                     alignItems={"flex-start"} style={{flex:1}}>
@@ -275,7 +274,7 @@ class PageLocationCheckin extends Component {
                         font={"content03"}
                         text={checkinMember.email}
                         color='black'/>
-                    {scanAlready == false && 
+                    {scanAlready == false &&
                     <Container fullwidth
                       justifyContent={"flex-start"}
                       alignItems={"flex-start"} style={{flex:1, alignItems:'center', marginTop: 100}}>
@@ -285,7 +284,7 @@ class PageLocationCheckin extends Component {
                           text={LangUtil.getStringByKey("success_signin")}
                           color='black'/>
                     </Container>}
-                    {scanAlready && 
+                    {scanAlready &&
                     <Container fullwidth
                       justifyContent={"flex-start"}
                       alignItems={"flex-start"} style={{flex:1, alignItems:'center', marginTop: 100}}>
@@ -303,7 +302,7 @@ class PageLocationCheckin extends Component {
                   </Container>}
 
                   {/* fail */}
-                  {!scan && scanFail && 
+                  {!scan && scanFail &&
                   <Container fullwidth
                     justifyContent={"flex-start"}
                     alignItems={"flex-start"} style={{flex:1, alignItems:'center', marginTop: 100}}>
@@ -319,8 +318,8 @@ class PageLocationCheckin extends Component {
                           color='black'/>
                   </Container>}
                 </Container>
-                
-                
+
+
                 {!scan && <View style={{flexDirection:'row', justifyContent: 'space-between', marginBottom:30}}>
                   <NormalButton
                     style={{width: '45%'}}
@@ -339,12 +338,12 @@ class PageLocationCheckin extends Component {
                 </View>
                 }
 
-                {scan && 
+                {scan &&
                 <NormalButton
                   style={{marginBottom:30}}
                   onPress={()=>{this.scanStop()}}
                   text={LangUtil.getStringByKey("stop_signin")}/>
-              } 
+              }
              </PageContainer>);
   }
 }
